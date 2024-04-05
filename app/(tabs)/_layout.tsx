@@ -1,7 +1,7 @@
 import { Link, Tabs } from 'expo-router';
 
 import { HeaderButton } from '../../components/HeaderButton';
-import { TabBarIcon } from '../../components/TabBarIcon';
+import { Ionicons, FontAwesome6 } from '@expo/vector-icons';
 
 export default function TabLayout() {
   return (
@@ -12,8 +12,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Home',
+          tabBarIcon: ({ color }) => <Ionicons name="home-sharp" color={color} size={28} />,
           headerRight: () => (
             <Link href="/modal" asChild>
               <HeaderButton />
@@ -24,8 +24,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="two"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Planilha',
+          tabBarIcon: ( ) => <FontAwesome6 name="file-excel" color={"black"} size={28}/>,
         }}
       />
     </Tabs>
