@@ -1,5 +1,4 @@
 import { Link, Tabs } from 'expo-router';
-
 import { HeaderButton } from '../../components/HeaderButton';
 import { Ionicons, FontAwesome6 } from '@expo/vector-icons';
 
@@ -19,6 +18,16 @@ export default function TabLayout() {
               <HeaderButton />
             </Link>
           ),
+          headerStyle:{
+            backgroundColor: '#6C1ED9',
+            borderBottomLeftRadius: 15,
+            borderBottomRightRadius: 15,
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle:{
+            fontWeight: 'bold',
+            fontSize: 25,
+          }
         }}
       />
       <Tabs.Screen
