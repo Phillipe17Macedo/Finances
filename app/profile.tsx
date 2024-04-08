@@ -3,10 +3,10 @@ import { Platform } from 'react-native';
 
 import { ScreenContent } from '~/components/ScreenContent';
 
-export default function Modal() {
+export default function Profile() {
   return (
     <>
-      <ScreenContent path="app/modal.tsx" title="Modal" />
+      <ScreenContent path="app/modal.tsx" title="Profile" />
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
     </>
   );
