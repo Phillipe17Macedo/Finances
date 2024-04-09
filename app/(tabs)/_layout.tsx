@@ -1,7 +1,6 @@
 import { Link, Tabs } from 'expo-router';
-import { HeaderButton } from '../../components/HeaderButton';
 import { Ionicons, FontAwesome6 } from '@expo/vector-icons';
-import { StyleSheet, StatusBar, Pressable } from 'react-native';
+import { StyleSheet, Pressable } from 'react-native';
 
 export default function TabLayout() {
   return (
