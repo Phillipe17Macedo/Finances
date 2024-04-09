@@ -1,8 +1,27 @@
 import { Stack } from 'expo-router';
 import React, { useState } from 'react';
-import { StyleSheet, View, SafeAreaView, ScrollView, Image, Text, Platform, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity } from 'react-native';
+import { salvarUsuario } from '../conection/firebaseDB';
 
 export default function Profile() {
+  const [nome, setNome] = useState('');
+  const [telefone, setTelefone] = useState('');
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [usuario, setUsuario] = useState('');
+
+  const salvarDadosUsuario = () => {
+    const novoUsuario = {
+      nome: nome,
+      telefone: telefone,
+      email: email,
+      senha: senha,
+      usuario: usuario
+    };
+
+    salvarUsuario(novoUsuario);
+  };
+
   return (
     <SafeAreaView>
       <ScrollView>
@@ -10,34 +29,45 @@ export default function Profile() {
           style={[styles.input, { marginTop: 25 }]}
           keyboardType="twitter"
           placeholder="Nome"
+          value={nome}
+          onChangeText={text => setNome(text)}
         />
         <TextInput
           style={[styles.input]}
           keyboardType="phone-pad"
           placeholder="Telefone"
+          value={telefone}
+          onChangeText={text => setTelefone(text)}
         />
         <TextInput
           style={[styles.input]}
           keyboardType="email-address"
           placeholder="Email"
+          value={email}
+          onChangeText={text => setEmail(text)}
         />
         <TextInput
           style={[styles.input]}
           keyboardType="visible-password"
           placeholder="Senha"
+          value={senha}
+          onChangeText={text => setSenha(text)}
         />
         <TextInput
           style={[styles.input]}
           keyboardType="default"
           placeholder="Usuário"
+          value={usuario}
+          onChangeText={text => setUsuario(text)}
         />
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={salvarDadosUsuario}>
           <Text style={styles.buttonText}>Salvar</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
