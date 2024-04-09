@@ -44,14 +44,14 @@ export default function TabLayout() {
               </Pressable>
             </Link>
           ),
-          headerStyle:{
+          headerStyle: {
             height: 120,
             backgroundColor: '#6C1ED9',
             borderBottomLeftRadius: 15,
             borderBottomRightRadius: 15,
           },
           headerTintColor: '#fff',
-          headerTitleStyle:{
+          headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 25,
           }
