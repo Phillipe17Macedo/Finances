@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, push } from 'firebase/database';
+import { getDatabase, ref, get, push, DataSnapshot } from 'firebase/database';
 
 const firebaseConfig = {
   apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
@@ -29,4 +29,19 @@ export const salvarUsuario = (usuario: Usuario) => {
     .catch((error) => {
       console.error("Erro ao adicionar novo usuário: ", error);
     });
+};
+export const buscarDadosDoBanco = async () => {
+  try {
+    const snapshot: DataSnapshot = await get(ref(db, 'usuarios'));
+    const dados: Usuario[] = [];
+    snapshot.forEach((childSnapshot) => {
+      // Extrai os dados de cada usuário do snapshot
+      const usuario: Usuario = childSnapshot.val();
+      dados.push(usuario);
+    });
+    return dados;
+  } catch (error) {
+    console.error("Erro ao buscar dados no banco:", error);
+    throw error;
+  }
 };
