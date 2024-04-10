@@ -1,7 +1,6 @@
 import { Link, Tabs } from 'expo-router';
-import { HeaderButton } from '../../components/HeaderButton';
 import { Ionicons, FontAwesome6 } from '@expo/vector-icons';
-import { StyleSheet, StatusBar, Pressable } from 'react-native';
+import { StyleSheet, Pressable } from 'react-native';
 
 export default function TabLayout() {
   return (
@@ -45,14 +44,14 @@ export default function TabLayout() {
               </Pressable>
             </Link>
           ),
-          headerStyle:{
+          headerStyle: {
             height: 120,
             backgroundColor: '#6C1ED9',
             borderBottomLeftRadius: 15,
             borderBottomRightRadius: 15,
           },
           headerTintColor: '#fff',
-          headerTitleStyle:{
+          headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 25,
           }
