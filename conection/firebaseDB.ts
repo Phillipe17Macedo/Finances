@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, get, push, DataSnapshot } from 'firebase/database';
+import { getDatabase, update, ref, set, get, push, DataSnapshot } from 'firebase/database';
 
 const firebaseConfig = {
   apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
@@ -22,14 +22,40 @@ const firebaseApp = initializeApp(firebaseConfig);
 const db = getDatabase(firebaseApp);
 
 export const salvarUsuario = (usuario: Usuario) => {
-  push(ref(db, 'usuarios'), usuario)
+  const usuariosRef = ref(db, 'usuarios');
+
+  push(usuariosRef)
     .then((newUserRef) => {
-      console.log("Novo usuário adicionado com ID: ", newUserRef.key);
+      // Obtém o ID único gerado para o novo usuário
+      const usuarioId = newUserRef.key;
+
+      // Adiciona o ID único aos dados do usuário
+      const usuarioComId = { ...usuario, id: usuarioId };
+
+      // Salva o usuário com o ID no banco de dados
+      set(ref(db, `usuarios/${usuarioId}`), usuarioComId)
+        .then(() => {
+          console.log("Novo usuário adicionado com ID: ", usuarioId);
+        })
+        .catch((error) => {
+          console.error("Erro ao adicionar novo usuário: ", error);
+        });
     })
     .catch((error) => {
-      console.error("Erro ao adicionar novo usuário: ", error);
+      console.error("Erro ao gerar ID para novo usuário: ", error);
     });
 };
+// Função para atualizar os dados de um usuário no banco de dados
+export const atualizarDadosNoBanco = async (usuarioId, novosDados) => {
+  try {
+    await update(ref(db, `usuarios/${usuarioId}`), novosDados);
+    console.log("Dados do usuário atualizados com sucesso.");
+  } catch (error) {
+    console.error("Erro ao atualizar dados do usuário:", error);
+    throw error;
+  }
+};
+
 export const buscarDadosDoBanco = async () => {
   try {
     const snapshot: DataSnapshot = await get(ref(db, 'usuarios'));

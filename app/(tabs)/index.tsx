@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 import React, { useState } from 'react';
 import { StyleSheet, View, SafeAreaView, ScrollView, Image, Text, Platform, TextInput, TouchableOpacity, Alert } from 'react-native';
-import { buscarDadosDoBanco } from '../../conection/firebaseDB'; // Importe a função que realiza a busca no banco de dados
+import { buscarDadosDoBanco, atualizarDadosNoBanco } from '../../conection/firebaseDB'; // Importe a função que realiza a busca no banco de dados
 
 export default function Home() {
   const [dadosDoBanco, setDadosDoBanco] = useState([]);
@@ -24,15 +24,28 @@ export default function Home() {
     return tipoUsuario === "admin";
   };
 
-  // Função para salvar as alterações nos dados do usuário
   const handleSalvarEdicao = () => {
-    // Adicione a lógica para salvar as alterações nos dados do usuário
-    // Por exemplo, você pode enviar os dados editados para o banco de dados
-    // e atualizar a lista de dados do banco com os novos dados
-    // Após salvar, limpe o estado de dadosUsuarioEditado e setDadosEditados para false
-    setDadosUsuarioEditado({});
-    setDadosEditados(false); // Resetar o estado de dadosEditados
+    try {
+      // Extrair o ID do usuário dos dados editados
+      const usuarioId = dadosUsuarioEditado.id; // Supondo que o ID do usuário seja armazenado como 'id' nos dados do usuário editado
+  
+      // Verificar se o ID do usuário é uma string válida
+      if (typeof usuarioId !== 'string' || usuarioId === '') {
+        throw new Error('ID do usuário inválido.');
+      }
+  
+      // Chamar a função para atualizar os dados no banco de dados
+      atualizarDadosNoBanco(usuarioId, dadosUsuarioEditado);
+  
+      // Limpar os estados de dados editados e usuário editado
+      setDadosUsuarioEditado({});
+      setDadosEditados(false);
+    } catch (error) {
+      console.error("Erro ao salvar dados no banco:", error);
+      Alert.alert("Erro", "Ocorreu um erro ao salvar os dados no banco de dados.");
+    }
   };
+  
 
   // Função para excluir o usuário
   const handleExcluirUsuario = (usuario) => {
