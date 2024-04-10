@@ -29,15 +29,17 @@ export default function Home() {
     // Adicione a lógica para salvar as alterações nos dados do usuário
     // Por exemplo, você pode enviar os dados editados para o banco de dados
     // e atualizar a lista de dados do banco com os novos dados
-    // Após salvar, limpe o estado de dadosUsuarioEditado
+    // Após salvar, limpe o estado de dadosUsuarioEditado e setDadosEditados para false
     setDadosUsuarioEditado({});
     setDadosEditados(false); // Resetar o estado de dadosEditados
   };
 
   // Função para excluir o usuário
-  const handleExcluirUsuario = () => {
+  const handleExcluirUsuario = (usuario) => {
     // Adicione a lógica para excluir o usuário
     // Por exemplo, você pode enviar uma solicitação para excluir o usuário do banco de dados
+    // e depois atualizar a lista de dados do banco de dados removendo o usuário excluído
+    setDadosDoBanco(dadosDoBanco.filter(item => item.usuario !== usuario));
   };
 
   // Função para atualizar o estado de dados editados ao digitar nos campos de entrada
@@ -106,6 +108,7 @@ export default function Home() {
                     style={styles.editButton}
                     onPress={() => {
                       setDadosUsuarioEditado(item);
+                      setDadosEditados(false); // Ao clicar em editar, os dados ainda não foram editados
                     }}
                   >
                     <Text style={styles.buttonText}>Editar</Text>
@@ -121,7 +124,7 @@ export default function Home() {
                   )}
                   <TouchableOpacity 
                     style={styles.deleteButton}
-                    onPress={handleExcluirUsuario}
+                    onPress={() => handleExcluirUsuario(item.usuario)} // Passando o usuário como parâmetro para a função
                   >
                     <Text style={styles.buttonText}>Excluir</Text>
                   </TouchableOpacity>
