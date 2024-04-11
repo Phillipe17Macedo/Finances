@@ -12,6 +12,7 @@ const firebaseConfig = {
   measurementId: process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 interface Usuario {
+    id: string;
     nome: string;
     telefone: string;
     email: string;
@@ -46,7 +47,8 @@ export const salvarUsuario = (usuario: Usuario) => {
     });
 };
 // Função para atualizar os dados de um usuário no banco de dados
-export const atualizarDadosNoBanco = async (usuarioId, novosDados) => {
+// Função para atualizar os dados de um usuário no banco de dados
+export const atualizarDadosNoBanco = async (usuarioId: string, novosDados: Usuario) => {
   try {
     await update(ref(db, `usuarios/${usuarioId}`), novosDados);
     console.log("Dados do usuário atualizados com sucesso.");
@@ -55,15 +57,26 @@ export const atualizarDadosNoBanco = async (usuarioId, novosDados) => {
     throw error;
   }
 };
-
 export const buscarDadosDoBanco = async () => {
   try {
     const snapshot: DataSnapshot = await get(ref(db, 'usuarios'));
     const dados: Usuario[] = [];
     snapshot.forEach((childSnapshot) => {
-      // Extrai os dados de cada usuário do snapshot
-      const usuario: Usuario = childSnapshot.val();
-      dados.push(usuario);
+      // Extrair os dados de cada usuário do snapshot
+      const usuarioData = childSnapshot.val();
+      // Verificar se os dados do usuário estão completos
+      if (usuarioData && typeof usuarioData === 'object' && 'nome' in usuarioData && 'telefone' in usuarioData && 'email' in usuarioData && 'senha' in usuarioData && 'usuario' in usuarioData) {
+        // Criar um objeto Usuario manualmente a partir dos dados do snapshot
+        const usuario: Usuario = {
+          id: childSnapshot.key, // Usar a chave do snapshot como ID do usuário
+          nome: usuarioData.nome,
+          telefone: usuarioData.telefone,
+          email: usuarioData.email,
+          senha: usuarioData.senha,
+          usuario: usuarioData.usuario,
+        };
+        dados.push(usuario);
+      }
     });
     return dados;
   } catch (error) {
@@ -71,3 +84,4 @@ export const buscarDadosDoBanco = async () => {
     throw error;
   }
 };
+

@@ -1,64 +1,64 @@
 import { Stack } from 'expo-router';
 import React, { useState } from 'react';
-import { StyleSheet, View, SafeAreaView, ScrollView, Image, Text, Platform, TextInput, TouchableOpacity, Alert } from 'react-native';
-import { buscarDadosDoBanco, atualizarDadosNoBanco } from '../../conection/firebaseDB'; // Importe a função que realiza a busca no banco de dados
+import { StyleSheet, View, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { buscarDadosDoBanco, atualizarDadosNoBanco } from '../../conection/firebaseDB';
+
+// Definição do tipo Usuario
+interface Usuario {
+  id: string;
+  nome: string;
+  telefone: string;
+  email: string;
+  senha: string;
+  usuario: string;
+}
 
 export default function Home() {
-  const [dadosDoBanco, setDadosDoBanco] = useState([]);
-  const [tipoUsuario, setTipoUsuario] = useState(""); // Estado para armazenar o tipo de usuário
-  const [dadosUsuarioEditado, setDadosUsuarioEditado] = useState({}); // Estado para armazenar os dados do usuário em edição
-  const [dadosEditados, setDadosEditados] = useState(false); // Estado para verificar se houve alterações nos dados editados
+  const [dadosDoBanco, setDadosDoBanco] = useState<Usuario[]>([]);
+  const [tipoUsuario, setTipoUsuario] = useState<string>("");
+  const [dadosUsuarioEditado, setDadosUsuarioEditado] = useState<Usuario | null>(null); // Alterado para permitir null
+  const [dadosEditados, setDadosEditados] = useState<boolean>(false);
 
   const handleBuscarDados = async () => {
     try {
-      const dados = await buscarDadosDoBanco(); // Função que realiza a busca no banco de dados
-      setDadosDoBanco(dados); // Atualiza o estado com os dados retornados do banco
+      const dados: Usuario[] = await buscarDadosDoBanco();
+      setDadosDoBanco(dados);
     } catch (error) {
       console.error("Erro ao buscar dados no banco:", error);
       Alert.alert("Erro", "Ocorreu um erro ao buscar os dados no banco de dados.");
     }
   };
 
-  // Função para verificar se o usuário é administrador
   const isAdministrador = () => {
     return tipoUsuario === "admin";
   };
 
   const handleSalvarEdicao = () => {
     try {
-      // Extrair o ID do usuário dos dados editados
-      const usuarioId = dadosUsuarioEditado.id; // Supondo que o ID do usuário seja armazenado como 'id' nos dados do usuário editado
-  
-      // Verificar se o ID do usuário é uma string válida
+      if (!dadosUsuarioEditado) {
+        throw new Error('Nenhum usuário em edição.');
+      }
+      const usuarioId = dadosUsuarioEditado.id;
       if (typeof usuarioId !== 'string' || usuarioId === '') {
         throw new Error('ID do usuário inválido.');
       }
-  
-      // Chamar a função para atualizar os dados no banco de dados
       atualizarDadosNoBanco(usuarioId, dadosUsuarioEditado);
-  
-      // Limpar os estados de dados editados e usuário editado
-      setDadosUsuarioEditado({});
+      setDadosUsuarioEditado(null); // Alterado para null após salvar
       setDadosEditados(false);
     } catch (error) {
       console.error("Erro ao salvar dados no banco:", error);
       Alert.alert("Erro", "Ocorreu um erro ao salvar os dados no banco de dados.");
     }
   };
-  
 
-  // Função para excluir o usuário
-  const handleExcluirUsuario = (usuario) => {
-    // Adicione a lógica para excluir o usuário
-    // Por exemplo, você pode enviar uma solicitação para excluir o usuário do banco de dados
-    // e depois atualizar a lista de dados do banco de dados removendo o usuário excluído
+  const handleExcluirUsuario = (usuario: string) => {
     setDadosDoBanco(dadosDoBanco.filter(item => item.usuario !== usuario));
   };
 
-  // Função para atualizar o estado de dados editados ao digitar nos campos de entrada
-  const handleChangeText = (key, value) => {
+  const handleChangeText = (key: keyof Usuario, value: string) => {
+    if (!dadosUsuarioEditado) return;
     setDadosUsuarioEditado({ ...dadosUsuarioEditado, [key]: value });
-    setDadosEditados(true); // Define que houve alterações nos dados editados
+    setDadosEditados(true);
   };
 
   return (
@@ -70,38 +70,36 @@ export default function Home() {
             style={[styles.input]}
             keyboardType="default"
             placeholder="Tipo Usuario"
-            onChangeText={setTipoUsuario} // Atualiza o estado do tipo de usuário
+            onChangeText={setTipoUsuario}
           />
           <TouchableOpacity style={styles.button} onPress={handleBuscarDados}>
             <Text style={styles.buttonText}>Buscar Dados</Text>
           </TouchableOpacity>
-          {/* Exibe os dados do banco */}
           {dadosDoBanco.map((item, index) => (
             <View key={index} style={styles.dadosContainer}>
-              {/* Renderiza os TextInput para edição apenas se o usuário for administrador */}
               {isAdministrador() ? (
                 <>
                   <TextInput
                     style={styles.inputField}
-                    value={dadosUsuarioEditado.nome || item.nome}
+                    value={(dadosUsuarioEditado && dadosUsuarioEditado.nome) || item.nome}
                     onChangeText={(value) => handleChangeText('nome', value)}
                     placeholder="Nome"
                   />
                   <TextInput
                     style={styles.inputField}
-                    value={dadosUsuarioEditado.telefone || item.telefone}
+                    value={(dadosUsuarioEditado && dadosUsuarioEditado.telefone) || item.telefone}
                     onChangeText={(value) => handleChangeText('telefone', value)}
                     placeholder="Telefone"
                   />
                   <TextInput
                     style={styles.inputField}
-                    value={dadosUsuarioEditado.email || item.email}
+                    value={(dadosUsuarioEditado && dadosUsuarioEditado.email) || item.email}
                     onChangeText={(value) => handleChangeText('email', value)}
                     placeholder="Email"
                   />
                   <TextInput
                     style={styles.inputField}
-                    value={dadosUsuarioEditado.usuario || item.usuario}
+                    value={(dadosUsuarioEditado && dadosUsuarioEditado.usuario) || item.usuario}
                     onChangeText={(value) => handleChangeText('usuario', value)}
                     placeholder="Usuário"
                   />
@@ -114,19 +112,17 @@ export default function Home() {
                   <Text style={styles.dadosText}>Usuário: {item.usuario}</Text>
                 </>
               )}
-              {/* Renderiza os botões de ação apenas se o usuário for administrador */}
               {isAdministrador() && (
                 <View style={styles.buttonsContainer}>
                   <TouchableOpacity 
                     style={styles.editButton}
                     onPress={() => {
-                      setDadosUsuarioEditado(item);
-                      setDadosEditados(false); // Ao clicar em editar, os dados ainda não foram editados
+                      setDadosUsuarioEditado({ ...item });
+                      setDadosEditados(false);
                     }}
                   >
                     <Text style={styles.buttonText}>Editar</Text>
                   </TouchableOpacity>
-                  {/* Renderiza o botão de salvar apenas se houver dados editados */}
                   {dadosEditados && (
                     <TouchableOpacity 
                       style={styles.saveButton}
@@ -137,7 +133,7 @@ export default function Home() {
                   )}
                   <TouchableOpacity 
                     style={styles.deleteButton}
-                    onPress={() => handleExcluirUsuario(item.usuario)} // Passando o usuário como parâmetro para a função
+                    onPress={() => handleExcluirUsuario(item.usuario)}
                   >
                     <Text style={styles.buttonText}>Excluir</Text>
                   </TouchableOpacity>
