@@ -1,7 +1,15 @@
-import { Stack } from 'expo-router';
 import React, { useState } from 'react';
 import { StyleSheet, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity } from 'react-native';
 import { salvarUsuario } from '../conection/firebaseDB';
+
+interface Usuario {
+  id: string;
+  nome: string;
+  telefone: string;
+  email: string;
+  senha: string;
+  usuario: string;
+}
 
 export default function Profile() {
   const [nome, setNome] = useState('');
@@ -10,8 +18,14 @@ export default function Profile() {
   const [senha, setSenha] = useState('');
   const [usuario, setUsuario] = useState('');
 
+  const gerarID = () => {
+    // Gere um ID único combinando um timestamp e um número aleatório
+    return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+  };
+
   const salvarDadosUsuario = () => {
     const novoUsuario = {
+      id: gerarID(),
       nome: nome,
       telefone: telefone,
       email: email,
