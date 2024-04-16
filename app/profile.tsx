@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity } from 'react-native';
-import { salvarUsuario } from '../conection/firebaseDB';
+import {
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 
-interface Usuario {
-  id: string;
-  nome: string;
-  telefone: string;
-  email: string;
-  senha: string;
-  usuario: string;
-}
+import { salvarUsuario } from '../conection/firebaseDB';
 
 export default function Profile() {
   const [nome, setNome] = useState('');
@@ -26,11 +25,11 @@ export default function Profile() {
   const salvarDadosUsuario = () => {
     const novoUsuario = {
       id: gerarID(),
-      nome: nome,
-      telefone: telefone,
-      email: email,
-      senha: senha,
-      usuario: usuario
+      nome,
+      telefone,
+      email,
+      senha,
+      usuario,
     };
 
     salvarUsuario(novoUsuario);
@@ -44,35 +43,35 @@ export default function Profile() {
           keyboardType="twitter"
           placeholder="Nome"
           value={nome}
-          onChangeText={text => setNome(text)}
+          onChangeText={(text) => setNome(text)}
         />
         <TextInput
           style={[styles.input]}
           keyboardType="phone-pad"
           placeholder="Telefone"
           value={telefone}
-          onChangeText={text => setTelefone(text)}
+          onChangeText={(text) => setTelefone(text)}
         />
         <TextInput
           style={[styles.input]}
           keyboardType="email-address"
           placeholder="Email"
           value={email}
-          onChangeText={text => setEmail(text)}
+          onChangeText={(text) => setEmail(text)}
         />
         <TextInput
           style={[styles.input]}
           keyboardType="visible-password"
           placeholder="Senha"
           value={senha}
-          onChangeText={text => setSenha(text)}
+          onChangeText={(text) => setSenha(text)}
         />
         <TextInput
           style={[styles.input]}
           keyboardType="default"
           placeholder="Usuário"
           value={usuario}
-          onChangeText={text => setUsuario(text)}
+          onChangeText={(text) => setUsuario(text)}
         />
         <TouchableOpacity style={styles.button} onPress={salvarDadosUsuario}>
           <Text style={styles.buttonText}>Salvar</Text>
@@ -86,7 +85,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   input: {
     alignSelf: 'center',
@@ -97,9 +96,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 10,
     marginBottom: 13,
-    backgroundColor: "#fff",
-    color: "#161F30",
-    fontWeight: "bold",
+    backgroundColor: '#fff',
+    color: '#161F30',
+    fontWeight: 'bold',
     fontSize: 18,
   },
   button: {
@@ -110,7 +109,7 @@ const styles = StyleSheet.create({
     width: 90,
   },
   buttonText: {
-    textAlign: "center",
+    textAlign: 'center',
     color: '#fff',
     fontWeight: 'bold',
   },

@@ -1,5 +1,5 @@
-import { Link, Tabs } from 'expo-router';
 import { Ionicons, FontAwesome6 } from '@expo/vector-icons';
+import { Link, Tabs } from 'expo-router';
 import { StyleSheet, Pressable } from 'react-native';
 
 export default function TabLayout() {
@@ -9,12 +9,12 @@ export default function TabLayout() {
         tabBarActiveTintColor: '#84B026',
         tabBarInactiveTintColor: '#202022',
         tabBarShowLabel: true,
-        tabBarStyle:{
+        tabBarStyle: {
           position: 'absolute',
           backgroundColor: '#F2F2F2',
           borderTopWidth: 0,
           bottom: 15,
-          alignSelf: "center",
+          alignSelf: 'center',
           left: 80,
           right: 80,
           elevation: 0,
@@ -54,14 +54,14 @@ export default function TabLayout() {
           headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 25,
-          }
+          },
         }}
       />
       <Tabs.Screen
         name="two"
         options={{
           title: 'Planilha',
-          tabBarIcon: ({color}) => <FontAwesome6 name="file-excel" color={color} size={28}/>,
+          tabBarIcon: ({ color }) => <FontAwesome6 name="file-excel" color={color} size={28} />,
           headerRight: () => (
             <Link href="/profile" asChild>
               <Pressable>
@@ -76,17 +76,17 @@ export default function TabLayout() {
               </Pressable>
             </Link>
           ),
-          headerStyle:{
+          headerStyle: {
             height: 120,
             backgroundColor: '#6C1ED9',
             borderBottomLeftRadius: 15,
             borderBottomRightRadius: 15,
           },
           headerTintColor: '#fff',
-          headerTitleStyle:{
+          headerTitleStyle: {
             fontWeight: 'bold',
             fontSize: 25,
-          }
+          },
         }}
       />
     </Tabs>

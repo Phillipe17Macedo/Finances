@@ -1,6 +1,5 @@
-import React from 'react';
 import { Stack } from 'expo-router';
-import { StyleSheet } from 'react-native';
+import React from 'react';
 
 export const unstable_settings = {
   initialRouteName: '(tabs)',
@@ -9,9 +8,9 @@ export const unstable_settings = {
 export default function RootLayout() {
   return (
     <Stack>
-      <Stack.Screen 
-        name="(tabs)" 
-        options={{ 
+      <Stack.Screen
+        name="(tabs)"
+        options={{
           headerShown: false,
           title: 'Perfil',
         }}

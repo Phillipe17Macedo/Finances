@@ -1,6 +1,16 @@
 import { Stack } from 'expo-router';
 import React, { useState } from 'react';
-import { StyleSheet, View, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
+
 import { buscarDadosDoBanco, atualizarDadosNoBanco } from '../../conection/firebaseDB';
 
 // Definição do tipo Usuario
@@ -15,7 +25,7 @@ interface Usuario {
 
 export default function Home() {
   const [dadosDoBanco, setDadosDoBanco] = useState<Usuario[]>([]);
-  const [tipoUsuario, setTipoUsuario] = useState<string>("");
+  const [tipoUsuario, setTipoUsuario] = useState<string>('');
   const [dadosUsuarioEditado, setDadosUsuarioEditado] = useState<Usuario | null>(null); // Alterado para permitir null
   const [dadosEditados, setDadosEditados] = useState<boolean>(false);
 
@@ -24,13 +34,13 @@ export default function Home() {
       const dados: Usuario[] = await buscarDadosDoBanco();
       setDadosDoBanco(dados);
     } catch (error) {
-      console.error("Erro ao buscar dados no banco:", error);
-      Alert.alert("Erro", "Ocorreu um erro ao buscar os dados no banco de dados.");
+      console.error('Erro ao buscar dados no banco:', error);
+      Alert.alert('Erro', 'Ocorreu um erro ao buscar os dados no banco de dados.');
     }
   };
 
   const isAdministrador = () => {
-    return tipoUsuario === "admin";
+    return tipoUsuario === 'admin';
   };
 
   const handleSalvarEdicao = () => {
@@ -46,13 +56,13 @@ export default function Home() {
       setDadosUsuarioEditado(null); // Alterado para null após salvar
       setDadosEditados(false);
     } catch (error) {
-      console.error("Erro ao salvar dados no banco:", error);
-      Alert.alert("Erro", "Ocorreu um erro ao salvar os dados no banco de dados.");
+      console.error('Erro ao salvar dados no banco:', error);
+      Alert.alert('Erro', 'Ocorreu um erro ao salvar os dados no banco de dados.');
     }
   };
 
   const handleExcluirUsuario = (usuario: string) => {
-    setDadosDoBanco(dadosDoBanco.filter(item => item.usuario !== usuario));
+    setDadosDoBanco(dadosDoBanco.filter((item) => item.usuario !== usuario));
   };
 
   const handleChangeText = (key: keyof Usuario, value: string) => {
@@ -114,27 +124,22 @@ export default function Home() {
               )}
               {isAdministrador() && (
                 <View style={styles.buttonsContainer}>
-                  <TouchableOpacity 
+                  <TouchableOpacity
                     style={styles.editButton}
                     onPress={() => {
                       setDadosUsuarioEditado({ ...item });
                       setDadosEditados(false);
-                    }}
-                  >
+                    }}>
                     <Text style={styles.buttonText}>Editar</Text>
                   </TouchableOpacity>
                   {dadosEditados && (
-                    <TouchableOpacity 
-                      style={styles.saveButton}
-                      onPress={handleSalvarEdicao}
-                    >
+                    <TouchableOpacity style={styles.saveButton} onPress={handleSalvarEdicao}>
                       <Text style={styles.buttonText}>Salvar</Text>
                     </TouchableOpacity>
                   )}
-                  <TouchableOpacity 
+                  <TouchableOpacity
                     style={styles.deleteButton}
-                    onPress={() => handleExcluirUsuario(item.usuario)}
-                  >
+                    onPress={() => handleExcluirUsuario(item.usuario)}>
                     <Text style={styles.buttonText}>Excluir</Text>
                   </TouchableOpacity>
                 </View>
@@ -151,7 +156,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   input: {
     alignSelf: 'center',
@@ -163,9 +168,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 10,
     marginBottom: 10,
-    backgroundColor: "#fff",
-    color: "#161F30",
-    fontWeight: "bold"
+    backgroundColor: '#fff',
+    color: '#161F30',
+    fontWeight: 'bold',
   },
   button: {
     alignSelf: 'center',
@@ -176,7 +181,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   buttonText: {
-    textAlign: "center",
+    textAlign: 'center',
     color: '#fff',
     fontWeight: 'bold',
   },
